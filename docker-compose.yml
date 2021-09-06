@@ -1,0 +1,40 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+        MYSQL_DATABASE: test_php
+        MYSQL_USER: test
+        MYSQL_PASSWORD: test
+        MYSQL_ROOT_PASSWORD: test
+    ports:
+        - "4306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    networks: 
+      - docker-skillup_default
+
+  php:
+    build: ./php
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html
+      - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    networks: 
+      - docker-skillup_default
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/html:/usr/share/nginx/html
+    restart: always
+    ports: 
+      - 8080:80
+    networks: 
+      - docker-skillup_default
+
+networks:
+  docker-skillup_default:
+    external: true
