@@ -6,3 +6,8 @@ RUN apt-get update \
     && docker-php-ext-install zip pdo_mysql
 
 RUN git clone https://github.com/phalcon/cphalcon.git -b phalcon-v2.0.6 --depth 1
+
+WORKDIR cphalcon/build
+RUN ./install
+
+WORKDIR /var/www
