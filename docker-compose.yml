@@ -8,11 +8,13 @@ services:
         MYSQL_USER: test
         MYSQL_PASSWORD: test
         MYSQL_ROOT_PASSWORD: test
+        DB_SOCKET: /var/run/mysqld/mysqld.sock
     ports:
         - "4306:3306"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ./db/mysql:/var/lib/mysql
+      - dbsocket:/var/run/mysqld
     networks: 
       - docker-skillup_default
 
@@ -21,6 +23,7 @@ services:
     volumes:
       - ./src:/var/www/phalcon/
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - dbsocket:/var/run/mysqld
     networks: 
       - docker-skillup_default
 
@@ -38,3 +41,6 @@ services:
 networks:
   docker-skillup_default:
     external: true
+
+volumes:
+  dbsocket:
